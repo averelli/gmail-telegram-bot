@@ -1,5 +1,6 @@
 import os
 from logging import Logger
+from config.config import GMAIL_TOKEN_PATH, GMAIL_CREDS_PATH
 
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
@@ -12,26 +13,28 @@ class GmailService:
         self.service = None
         self.logger = logger
         self.SCOPES = ["https://www.googleapis.com/auth/gmail.readonly"]
+        self.CREDS_PATH = GMAIL_CREDS_PATH
+        self.TOKEN_PATH = GMAIL_TOKEN_PATH
         self._authenticate()
 
     def _authenticate(self):
         try: 
             # The file token.json stores the user"s access and refresh tokens, and is
             # created automatically when the authorization flow completes for the first time.
-            if os.path.exists("secrets/token.json"):
-                self.creds = Credentials.from_authorized_user_file("secrets/token.json", self.SCOPES)
+            if os.path.exists(self.TOKEN_PATH):
+                self.creds = Credentials.from_authorized_user_file(self.TOKEN_PATH, self.SCOPES)
             # If there are no (valid) credentials available, let the user log in.
             if not self.creds or not self.creds.valid:
                 if self.creds and self.creds.expired and self.creds.refresh_token:
                     self.creds.refresh(Request())
                 else:
                     flow = InstalledAppFlow.from_client_secrets_file(
-                        "secrets/credentials.json", self.SCOPES
+                        self.CREDS_PATH, self.SCOPES
                     )
                     self.creds = flow.run_local_server(port=0)
 
             # Save the credentials for the next run
-            with open("secrets/token.json", "w") as token:
+            with open(self.TOKEN_PATH, "w") as token:
                 token.write(self.creds.to_json())
 
             self.logger.info("Successfully authenticated Gmail Service.")
