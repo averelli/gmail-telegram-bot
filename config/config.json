@@ -1,0 +1,7 @@
+{
+  "chat_id": 889810268,
+  "poll_interval": 1800,
+  "query_path": "queries.json",
+  "gmail_creds_path": "secrets/credentials.json",
+  "gmail_token_path": "secrets/token.json"
+}
