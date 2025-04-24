@@ -53,7 +53,6 @@ class GmailService:
         try:
             service = self._get_service()
             unread_mail = service.users().messages().list(userId="me", q=query).execute().get("messages", [])
-            print(unread_mail)
             msg_count = len(unread_mail)
             if msg_count > 0:
                 self.logger.info(f"[Query id: {query_id}] Successfully fetched {msg_count} messages")
