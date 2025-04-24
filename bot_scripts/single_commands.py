@@ -1,9 +1,9 @@
 import logging
 
 from telegram import Update
-from telegram.ext import ConversationHandler, CommandHandler, MessageHandler, filters, ContextTypes
+from telegram.ext import ContextTypes
 
-from .bot_utils import load_queries
+from utils import load_queries
 from config import set_chat_id
 
 logger = logging.getLogger("email-telegram-bot")

@@ -1,7 +1,8 @@
 import logging
 from telegram import Update
 from telegram.ext import ConversationHandler, CommandHandler, MessageHandler, filters, ContextTypes
-from .bot_utils import save_queries, load_queries, cancel_fallback
+from .bot_utils import cancel_fallback
+from utils import save_queries, load_queries
 
 # State constants
 ADD_EMAIL, ADD_KEYWORDS, ADD_MSG, ADD_CONFIRM = range(4)

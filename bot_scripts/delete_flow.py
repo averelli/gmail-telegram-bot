@@ -3,7 +3,8 @@ import logging
 from telegram import Update
 from telegram.ext import ConversationHandler, CommandHandler, MessageHandler, filters, ContextTypes
 
-from .bot_utils import save_queries, load_queries, cancel_fallback
+from .bot_utils import cancel_fallback
+from utils import save_queries, load_queries
 
 DEL_CHOOSE, = range(1)
 logger = logging.getLogger("email-telegram-bot")
