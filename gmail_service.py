@@ -1,6 +1,6 @@
 import os
 from logging import Logger
-from config.config import GMAIL_TOKEN_PATH, GMAIL_CREDS_PATH
+from config import GMAIL_TOKEN_PATH, GMAIL_CREDS_PATH
 
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
@@ -48,26 +48,25 @@ class GmailService:
             self.service = build("gmail", "v1", credentials=self.creds)
         return self.service
 
-    def fetch_emails(self, query_tuple: tuple[int,str]) -> list:
-        query_id, query = query_tuple
-        self.logger.info(f"Fetching emails for query id: {query_id}")
-
+    def fetch_emails(self, query_id:int, query:str) -> list:
+        self.logger.info(f"[Query id: {query_id}] Started fetching emails")
         try:
             service = self._get_service()
-            unread_mail = service.users().messages().list(userId="me", q=query).execute()['messages']
+            unread_mail = service.users().messages().list(userId="me", q=query).execute().get("messages", [])
+            print(unread_mail)
             msg_count = len(unread_mail)
             if msg_count > 0:
-                self.logger.info(f"Successfully fetched {msg_count} messages for qeury id: {query_id}")
+                self.logger.info(f"[Query id: {query_id}] Successfully fetched {msg_count} messages")
                 return unread_mail
             else:
-                self.logger.info(f"No new messages for query id: {query_id}")
+                self.logger.info(f"[Query id: {query_id}] No new messages found")
                 return []
         except Exception as e:
-            self.logger.error(f"Error fetching messages for [query id: {query_id}]: {e}", exc_info=True)
+            self.logger.error(f"[Query id: {query_id}] Error fetching messages: {e}", exc_info=True)
             return []
     
     def extract_subject(self, msg_id) -> str|None:
-        self.logger.info(f"Extracting subject for msg id: {msg_id}")
+        self.logger.info(f"[msg id: {msg_id}] Starting subject extraction")
         try:
             service = self._get_service()
             metadata = service.users().messages().get(userId="me", id=msg_id, format="metadata").execute()
@@ -79,12 +78,12 @@ class GmailService:
                     subject =  header["value"]   
 
             if subject:
-                self.logger.info(f"Subject extracted for msg id: {msg_id}")   
+                self.logger.info(f"[msg id: {msg_id}] Subject extracted")   
                 return subject
             else:
-                self.logger.warning(f"No subject header found for msg id: {msg_id}")
+                self.logger.warning(f"[msg id: {msg_id}] No subject header found")
                 return subject
         except Exception as e:
-            self.logger.error(f"Error while extracting subject for [msg id: {msg_id}]: {e}", exc_info=True)
+            self.logger.error(f"[msg id: {msg_id}] Error while extracting subject: {e}", exc_info=True)
             return None
         
