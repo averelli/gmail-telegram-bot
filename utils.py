@@ -26,3 +26,18 @@ def save_queries(queries:list):
         logger.error(f"Error while saving queries: {e}", exc_info=True)
         raise
 
+
+def update_processed_messages(q_id:int, msg_id:str):
+    """Adds a message id to processed_messages list for provided query id"""
+    logger.info(f"[]")
+    old_queries = load_queries()
+    new_queries = []
+
+    for q in old_queries:
+        if q["id"] == q_id:
+            q["processed_messages"].append(msg_id)
+            new_queries.append(q)
+        else:
+            new_queries.append(q)
+
+    save_queries(new_queries)
