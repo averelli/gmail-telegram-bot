@@ -48,7 +48,7 @@ async def add_confirm(upd: Update, ctx: ContextTypes.DEFAULT_TYPE):
     answer = upd.message.text.strip().lower()
     if answer in ("yes", "y"):
         queries = load_queries()
-        new_id = len(queries) + 1
+        new_id = max([q["id"] for q in queries]) + 1
         queries.append({
             "id": new_id,
             "email": ctx.user_data["email"],
