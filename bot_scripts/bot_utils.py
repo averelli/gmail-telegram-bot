@@ -1,11 +1,16 @@
-import os
 import json
 import logging
+
 from telegram import Update
-from telegram.ext import ConversationHandler, ContextTypes
-from config.config import QUERIES_PATH
+from telegram.ext import Application, ConversationHandler, ContextTypes
+
+from config import QUERIES_PATH, BOT_TOKEN
 
 logger = logging.getLogger("email-telegram-bot")
+
+def get_bot() -> Application:
+    return Application.builder().token(BOT_TOKEN).build()
+
 
 def load_queries() -> list:
     try:
@@ -20,6 +25,7 @@ def load_queries() -> list:
         logger.error(f"Error while loading queries: {e}", exc_info=True)
         raise
     
+
 def save_queries(queries:list):
     try:
         with open(QUERIES_PATH, "w") as f:
@@ -27,6 +33,7 @@ def save_queries(queries:list):
     except Exception as e:
         logger.error(f"Error while saving queries: {e}", exc_info=True)
         raise
+
 
 async def cancel_fallback(upd: Update, ctx: ContextTypes.DEFAULT_TYPE):
     await upd.message.reply_text("Operation cancelled")
