@@ -1,14 +1,17 @@
-from telegram.ext import Application, CommandHandler
+import logging
+from telegram.ext import CommandHandler, Application
 import bot_scripts as scripts
-from config.config import BOT_TOKEN
-from config.logging_config import setup_logging
 
-logger = setup_logging()
+logger = logging.getLogger("email-telegram-bot")
 
-bot = Application.builder().token(BOT_TOKEN).build()
+def build_bot_app() -> Application:
+    """Adds bot handlers and returns the app"""
+    bot = scripts.get_bot()
 
-bot.add_handler(scripts.build_add_handler())
-bot.add_handler(scripts.build_delete_handler())
-bot.add_handler(CommandHandler("start", scripts.start))
+    bot.add_handler(scripts.build_add_handler())
+    bot.add_handler(scripts.build_delete_handler())
+    bot.add_handler(CommandHandler("refresh", scripts.refresh))
+    bot.add_handler(CommandHandler("list", scripts.list))
+    bot.add_handler(CommandHandler("help", scripts.help))
 
-bot.run_polling()
+    return bot
