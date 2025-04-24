@@ -1,7 +1,9 @@
+import logging
+
 from telegram import Update
 from telegram.ext import ConversationHandler, CommandHandler, MessageHandler, filters, ContextTypes
+
 from .bot_utils import save_queries, load_queries, cancel_fallback
-import logging
 
 DEL_CHOOSE, = range(1)
 logger = logging.getLogger("email-telegram-bot")
@@ -28,6 +30,7 @@ async def del_start(upd: Update, ctx: ContextTypes.DEFAULT_TYPE):
         logger.error(f"Unexpected error: {e}", exc_info=True)
         raise
 
+
 async def del_choose(upd: Update, ctx: ContextTypes.DEFAULT_TYPE):
     del_id = int(upd.message.text.strip())
     logger.info(f"Deleting query id: {del_id}")
@@ -41,6 +44,7 @@ async def del_choose(upd: Update, ctx: ContextTypes.DEFAULT_TYPE):
     except Exception as e:
         logger.error(f"Error while deleting a query [id: {del_id}]: {e}", exc_info=True)
         raise
+
 
 def build_delete_handler():
     return ConversationHandler(

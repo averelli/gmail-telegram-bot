@@ -1,7 +1,7 @@
+import logging
 from telegram import Update
 from telegram.ext import ConversationHandler, CommandHandler, MessageHandler, filters, ContextTypes
 from .bot_utils import save_queries, load_queries, cancel_fallback
-import logging
 
 # State constants
 ADD_EMAIL, ADD_KEYWORDS, ADD_MSG, ADD_CONFIRM = range(4)
@@ -13,6 +13,7 @@ async def add_start(upd: Update, ctx: ContextTypes.DEFAULT_TYPE):
     await upd.message.reply_text("Add email address to follow")
     return ADD_EMAIL
 
+
 async def add_email(upd: Update, ctx: ContextTypes.DEFAULT_TYPE):
     email = upd.message.text.strip()
     logger.info(f"User provided an email address")
@@ -20,12 +21,14 @@ async def add_email(upd: Update, ctx: ContextTypes.DEFAULT_TYPE):
     await upd.message.reply_text("Add keywords to look for (space separated)")
     return ADD_KEYWORDS
 
+
 async def add_keywords(upd: Update, ctx: ContextTypes.DEFAULT_TYPE):
     keywords = upd.message.text.strip().split()
     logger.info("User provided keywords")
     ctx.user_data["keywords"] = keywords
     await upd.message.reply_text("Add custom notification text")
     return ADD_MSG
+
 
 async def add_msg(upd: Update, ctx: ContextTypes.DEFAULT_TYPE):
     notif_msg = upd.message.text.strip()
@@ -39,6 +42,7 @@ async def add_msg(upd: Update, ctx: ContextTypes.DEFAULT_TYPE):
     )
     await upd.message.reply_markdown(preview)
     return ADD_CONFIRM
+
 
 async def add_confirm(upd: Update, ctx: ContextTypes.DEFAULT_TYPE):
     answer = upd.message.text.strip().lower()
@@ -60,6 +64,7 @@ async def add_confirm(upd: Update, ctx: ContextTypes.DEFAULT_TYPE):
         logger.info("User cancelled operation")
     
     return ConversationHandler.END
+
 
 def build_add_handler():
     return ConversationHandler(
