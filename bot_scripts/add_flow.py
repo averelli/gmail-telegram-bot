@@ -55,7 +55,8 @@ async def add_confirm(upd: Update, ctx: ContextTypes.DEFAULT_TYPE):
             "email": ctx.user_data["email"],
             "keywords": ctx.user_data["keywords"],
             "notif_msg": ctx.user_data["notif_msg"],
-            "full_query": f"from:{ctx.user_data["email"]} {" ".join(ctx.user_data["keywords"])} is:unread"
+            "full_query": f"from:{ctx.user_data["email"]} {" ".join(ctx.user_data["keywords"])} is:unread",
+            "processed_messages": []
         })
         save_queries(queries)
         await upd.message.reply_text("Saved!")
