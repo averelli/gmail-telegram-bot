@@ -1,8 +1,6 @@
-import logging
 from telegram.ext import CommandHandler, Application
 import bot_scripts as scripts
-
-logger = logging.getLogger("email-telegram-bot")
+from config import setup_logging
 
 def build_bot_app() -> Application:
     """Adds bot handlers and returns the app"""
@@ -15,3 +13,10 @@ def build_bot_app() -> Application:
     bot.add_handler(CommandHandler("help", scripts.help))
 
     return bot
+
+if __name__ == "__main__":
+    logger = setup_logging()
+    bot = build_bot_app()
+    logger.info("Running just the bot")
+    bot.run_polling()
+    logger.info("Bot stopped")
