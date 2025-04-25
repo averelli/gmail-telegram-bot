@@ -29,7 +29,7 @@ def save_queries(queries:list):
 
 def update_processed_messages(q_id:int, msg_id:str):
     """Adds a message id to processed_messages list for provided query id"""
-    logger.info(f"[]")
+    logger.info(f"[Query id: {q_id}] Adding a message id to processed_messages")
     old_queries = load_queries()
     new_queries = []
 
