@@ -7,7 +7,7 @@ logger = setup_logging()
 def main():
     logger.info("Starting the bot")
     bot = build_bot_app()
-    bot.job_queue.run_repeating(callback=gmail_poller, interval=POLL_INTERVAL, first=0)
+    bot.job_queue.run_repeating(callback=gmail_poller, interval=POLL_INTERVAL, first=1)
     bot.run_polling()
     logger.info("Bot stopped")
 
