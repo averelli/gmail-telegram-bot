@@ -44,3 +44,5 @@ async def gmail_poller(ctx: ContextTypes.DEFAULT_TYPE):
     except Exception as e:
         logger.error(f"Error while processing queries: {e}", exc_info=True)
         await ctx.bot.send_message(chat_id, "Error occured while processing queries")
+    
+    logger.info("Gmail poller finished")
